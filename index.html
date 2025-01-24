@@ -27,18 +27,32 @@
         }
 
         .logotipo {
-            display: block;
+            padding: 10px;
+            display: flex;
             margin: 0 auto 0px; 
             max-width: 300px;
         }
 
         .container {
-            max-width: 600px;
+            display: block;
+            max-width: 500px;
             margin: 40px auto;
             padding: 20px;
             background-color: #fff;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .informacoes {
+            display: block;
+            text-align: center;
+            margin-top: 0px;
+            font-size: 0.9em;
+            font-weight: bold;
+            color: #000000;
+            background-color: #f2f2f2;
+            padding: 0px;
+            border-radius: 8px;
         }
 
         label {
@@ -95,7 +109,8 @@
             border-radius: 6px;
             color: #000000;
         }
-
+    
+         
         .footer {
             text-align: center;
             margin-top: 0px;
@@ -105,15 +120,6 @@
             background-color: #f2f2f2;
             padding: 0px;
             border-radius: 8px;
-        }
-
-        .footer a {
-            color: #0056b3;
-            text-decoration: none;
-        }
-
-        .footer a:hover {
-            text-decoration: underline;
         }
 
         #campo_divida {
@@ -126,10 +132,8 @@
     <header>
         <h1>Simulador de Custas</h1>
     </header>
-    <br>
     <!-- Logo-->
     <img src="logo.png" alt="logotipo" class="logotipo">
-
     <div class="container">
         <form id="simuladorForm">
             <label for="tipo_servico">Selecione o Tipo de Serviço</label>
@@ -156,6 +160,14 @@
         <div class="result" id="resultado"></div>
         <div class="result2" id="resultado2"></div>
     </div>
+
+    <div class="informacoes">
+        <p><b>Observações importantes:</b> <br>
+            <b>1 -</b> Os valores da simulação são estimativos, podendo haver alterações após a análise dos documentos, em decorrência dos atos a serem praticados;<br>
+            <b>2 –</b> Foi incluído nesta simulação o valor relativo ao ISSQN com a alíquota de 4%, podendo haver alteração deste valor em determinados Municípios;<br>
+            <b>3 –</b> Não foram incluídos, nesta simulação, eventuais descontos e isenções previstos em lei;</p>
+    </div>
+
 
     <div class="footer">
         <p><b>Observações importantes:</b> <br>
