@@ -17,13 +17,19 @@
         header {
             background-color: #218838;
             color: white;
-            padding: 20px;
+            padding: 10px;
             text-align: center;
         }
 
         header h1 {
             margin: 0;
             font-size: 2em;
+        }
+
+        .logotipo {
+            display: block;
+            margin: 0 auto 0px; 
+            max-width: 300px;
         }
 
         .container {
@@ -69,22 +75,35 @@
         .result {
             text-align: center;
             font-size: 1.3em;
-            font-weight: bold;
+            font-weight: bolder;
             margin-top: 30px;
-            padding: 15px;
+            padding: 5px;
             background-color: #e7f7e7;
             border: 1px solid #c7f0c7;
             border-radius: 6px;
             color: #3c763d;
         }
 
+        .result2 {
+            text-align: center;
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-top: 30px;
+            padding: 5px;
+            background-color: #e7f7e7;
+            border: 1px solid #c7f0c7;
+            border-radius: 6px;
+            color: #000000;
+        }
+
         .footer {
             text-align: center;
-            margin-top: 40px;
+            margin-top: 0px;
             font-size: 0.9em;
-            color: #777;
+            font-weight: bold;
+            color: #000000;
             background-color: #f2f2f2;
-            padding: 20px;
+            padding: 0px;
             border-radius: 8px;
         }
 
@@ -109,7 +128,7 @@
     </header>
     <br>
     <!-- Logo-->
-    <img src="logo.png" alt="Logotipo" style="display: block; margin: 0 auto 0px; max-width: 450px;">
+    <img src="logo.png" alt="logotipo" class="logotipo">
 
     <div class="container">
         <form id="simuladorForm">
@@ -121,7 +140,7 @@
                 <option value="doacaousuf">Escritura Pública de Doação com Usufruto</option>
                 <option value="formal">Formal de Partilha</option>
             </select>
-
+            <br><br>
             <label for="valor_imovel">Valor do Imóvel (R$)</label>
             <input type="text" id="valor_imovel" required placeholder="Informe o valor do imóvel" oninput="formatarMoeda(this)">
 
@@ -135,6 +154,7 @@
         </form>
 
         <div class="result" id="resultado"></div>
+        <div class="result2" id="resultado2"></div>
     </div>
 
     <div class="footer">
@@ -149,8 +169,6 @@
         function mostrarCampoDivida() {
             const tipoServico = document.getElementById('tipo_servico').value;
             const campoDivida = document.getElementById('campo_divida');
-
-            
             if (tipoServico === 'contrato') {
                 campoDivida.style.display = 'block';
             } else {
@@ -174,6 +192,12 @@
         input.value = valor.replace("R$", "").trim();
         }    
 
+        // Função para obter o valor numérico de um campo formatado
+        function obterValorNumerico(input) {
+        // Remove os separadores e converte para número
+        return parseFloat(input.value.replace(/\./g, "").replace(",", ".") || "0");
+        }
+        
         // Função para calcular os custos totais
         function calcularCustos() {
             // Obtendo valores do formulário
@@ -245,19 +269,23 @@
             
 
 
-            let emolumentoTotal = 0;
+            let emolumentoImovel = 0;
+            let emolumentoDivida = 0;
+            let emolumentoUsuf = 0;
+            let emolumentoFinal = 0;
 
             // Calcular emolumento com base no valor do imóvel
             for (let faixa of faixasEmolumentos5e) {
                 if (valorImovel <= faixa.limite) {
-                    emolumentoTotal = faixa.valores[0];
+                    emolumentoImovel = faixa.valores[0];
                     break;
                 }
             }
 
             // Se o tipo de serviço for "contrato", incluir o valor da dívida no cálculo (se fornecido)
             if (tipoServico === 'contrato') {
-                
+                 // Inicializar a visibilidade do campo de dívida
+                mostrarCampoDivida();
                 const valorDividaInput = obterValorNumerico(document.getElementById('valor_divida'));
 
                 if (!valorDividaInput || isNaN(valorDividaInput) || valorDividaInput <= 0) {
@@ -270,7 +298,7 @@
                 // Calcular emolumento da dívida
                 for (let faixa of faixasEmolumentos5e) {
                     if (valorDivida <= faixa.limite) {
-                        emolumentoTotal += faixa.valores[0];
+                        emolumentoDivida += faixa.valores[0];
                         break;
                     }
                 }
@@ -286,24 +314,27 @@
                 // Calcular emolumento do usufruto
                 for (let faixa of faixasEmolumentos5e) {
                     if (valorUsuf<= faixa.limite) {
-                        emolumentoTotal += faixa.valores[0];
+                        emolumentoUsuf += faixa.valores[0];
                         break;
                     }
                 }
             }
 
-            // Exibir o resultado formatado
-            document.getElementById('resultado').innerHTML = `O custo total estimado para o serviço é de R$ ${emolumentoTotal.toFixed(2)}`;
-        }
+            
+            if (tipoServico === 'contrato') {
+                let prenotacao = 60.04;
+                let arquivamento = 206.80;
+                let certidao = 40.34;
+                emolumentoFinal = emolumentoImovel + emolumentoDivida + prenotacao + arquivamento + certidao;
+                document.getElementById('resultado').innerHTML = `O custo total estimado para o serviço é de R$ ${emolumentoFinal.toFixed(2)}`;
+                document.getElementById('resultado2').innerHTML = `Discriminação dos valores <br><br>Prenotação: R$ ${prenotacao.toFixed(2)} <br>Registro da compra e venda: R$ ${emolumentoImovel.toFixed(2)}<br>Registro da alienação: R$ ${emolumentoDivida.toFixed(2)}<br>20 arquivamentos: R$ ${arquivamento.toFixed(2)}<br>Certidão: R$ ${certidao.toFixed(2)}`;
+            }
 
-        // Função para obter o valor numérico de um campo formatado
-        function obterValorNumerico(input) {
-        // Remove os separadores e converte para número
-        return parseFloat(input.value.replace(/\./g, "").replace(",", ".") || "0");
+            
+           
         }
-
-        // Inicializar a visibilidade do campo de dívida
-        mostrarCampoDivida();
+    
+    
     </script>
 
 </body>
