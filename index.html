@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Custos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f9fc;
+        }
+
+        header {
+            background-color: #218838;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2em;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 12px 20px;
+            background-color: #218838;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.1em;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        .result {
+            text-align: center;
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-top: 30px;
+            padding: 15px;
+            background-color: #e7f7e7;
+            border: 1px solid #c7f0c7;
+            border-radius: 6px;
+            color: #3c763d;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 0.9em;
+            color: #777;
+            background-color: #f2f2f2;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .footer a {
+            color: #0056b3;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        #campo_divida {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Simulador de Custas</h1>
+    </header>
+
+    <div class="container">
+        <form id="simuladorForm">
+            <label for="tipo_servico">Selecione o Tipo de Serviço</label>
+            <select id="tipo_servico" required onchange="mostrarCampoDivida()">
+                <option value="registro">Escritura pública de Compra e venda</option>
+                <option value="contrato">Contrato de Compra e Venda com Alienação</option>
+                <option value="doacao">Escritura Pública de Doação</option>
+                <option value="doacaousuf">Escritura Pública de Doação com Usufruto</option>
+                <option value="formal">Formal de Partilha</option>
+            </select>
+
+            <label for="valor_imovel">Valor do Imóvel (R$)</label>
+            <input type="number" id="valor_imovel" required placeholder="Informe o valor do imóvel" step="0.01">
+
+            <!-- Campo adicional para valor da dívida -->
+            <div id="campo_divida" style="display: none;">
+                <label for="valor_divida">Valor da Dívida (R$)</label>
+                <input type="number" id="valor_divida" placeholder="Informe o valor da dívida" step="0.01">
+            </div>
+
+            <button type="button" onclick="calcularCustos()">Calcular</button>
+        </form>
+
+        <div class="result" id="resultado"></div>
+    </div>
+
+    <div class="footer">
+        <p><b>Observações importantes:</b> <br>
+            <b>1 -</b> Os valores da simulação são estimativos, podendo haver alterações após a análise dos documentos, em decorrência dos atos a serem praticados;<br>
+            <b>2 –</b> Foi incluído nesta simulação o valor relativo ao ISSQN com a alíquota de 4%, podendo haver alteração deste valor em determinados Municípios;<br>
+            <b>3 –</b> Não foram incluídos, nesta simulação, eventuais descontos e isenções previstos em lei;</p>
+    </div>
+
+    <script>
+        function mostrarCampoDivida() {
+            const tipoServico = document.getElementById('tipo_servico').value;
+            const campoDivida = document.getElementById('campo_divida');
+
+            // Exibe o campo de dívida se o tipo de serviço for 'contrato'
+            if (tipoServico === 'contrato') {
+                campoDivida.style.display = 'block';
+            } else {
+                campoDivida.style.display = 'none';
+            }
+        }
+
+        function calcularCustos() {
+            // Obtendo valores do formulário
+            const tipoServico = document.getElementById('tipo_servico').value;
+            const valorImovel = parseFloat(document.getElementById('valor_imovel').value);
+            let valorDivida = 0;
+
+            // Validação de entrada do valor do imóvel
+            if (isNaN(valorImovel) || valorImovel <= 0) {
+                alert("Por favor, insira um valor válido para o imóvel.");
+                return;
+            }
+
+            // Tabela de emolumentos 5e (valores estimados de custos)
+            const faixasEmolumentos5e = [
+            { limite: 1400, valores: [216.43] },
+            { limite: 2720, valores: [353.03] },
+            { limite: 5440, valores: [511.61] },
+            { limite: 7000, valores: [708.25] },
+            { limite: 14000, valores: [944.49] },
+            { limite: 28000, valores: [1220.24] },
+            { limite: 42000, valores: [1534.84] },
+            { limite: 56000, valores: [1889.32] },
+            { limite: 70000, valores: [2283.03] },
+            { limite: 105000, valores: [2873.33] },
+            { limite: 140000, valores: [3646.71] },
+            { limite: 175000, valores: [3899.70] },
+            { limite: 210000, valores: [4153.12] },
+            { limite: 280000, valores: [4669.40] },
+            { limite: 350000, valores: [4798.03] },
+            { limite: 420000, valores: [4927.24] },
+            { limite: 560000, valores: [5396.08] },
+            { limite: 700000, valores: [5692.65] },
+            { limite: 840000, valores: [5989.82] },
+            { limite: 1120000, valores: [6699.21] },
+            { limite: 1400000, valores: [7256.41] },
+            { limite: 1680000, valores: [7814.56] },
+            { limite: 3200000, valores: [8373.83] },
+            { limite: Infinity, valores: [10467.62] }
+            ];
+
+            // Tabela de emolumentos 5e (valores estimados de custos)
+            const faixasEmolumentos1c = [
+            { limite: 1400, valores: [108.21] },
+            { limite: 2720, valores: [176.52] },
+            { limite: 5440, valores: [255.80] },
+            { limite: 7000, valores: [354.12] },
+            { limite: 14000, valores: [472.24] },
+            { limite: 28000, valores: [610.12] },
+            { limite: 42000, valores: [767.42] },
+            { limite: 56000, valores: [944.66] },
+            { limite: 70000, valores: [1141.52] },
+            { limite: 105000, valores: [1436.67] },
+            { limite: 140000, valores: [1823.35] },
+            { limite: 175000, valores: [1949.85] },
+            { limite: 210000, valores: [2076.57] },
+            { limite: 280000, valores: [2334.70] },
+            { limite: 350000, valores: [2399.02] },
+            { limite: 420000, valores: [2463.62] },
+            { limite: 560000, valores: [2698.04] },
+            { limite: 700000, valores: [2846.33] },
+            { limite: 840000, valores: [2994.91] },
+            { limite: 1120000, valores: [3349.61] },
+            { limite: 1400000, valores: [3628.20] },
+            { limite: 1680000, valores: [3907.28] },
+            { limite: 3200000, valores: [4186.92] },
+            { limite: Infinity, valores: [5233.81] }
+            ];
+            
+
+
+            let emolumentoTotal = 0;
+
+            // Calcular emolumento com base no valor do imóvel
+            for (let faixa of faixasEmolumentos5e) {
+                if (valorImovel <= faixa.limite) {
+                    emolumentoTotal = faixa.valores[0];
+                    break;
+                }
+            }
+
+            // Se o tipo de serviço for "contrato", incluir o valor da dívida no cálculo (se fornecido)
+            if (tipoServico === 'contrato') {
+                const valorDividaInput = document.getElementById('valor_divida').value;
+                if (!valorDividaInput || isNaN(valorDividaInput) || valorDividaInput <= 0) {
+                    alert("Por favor, insira um valor válido para a dívida.");
+                    return;
+                }
+
+                valorDivida = parseFloat(valorDividaInput);
+
+                // Calcular emolumento da dívida
+                for (let faixa of faixasEmolumentos5e) {
+                    if (valorDivida <= faixa.limite) {
+                        emolumentoTotal += faixa.valores[0];
+                        break;
+                    }
+                }
+            }
+
+            // Se o tipo de serviço for "doação com usufruto",    
+            if (tipoServico === 'doacaousuf') {
+                const valorUsufInput = (valorImovel/3)
+                
+
+                valorUsuf = parseFloat(valorUsufInput);
+
+                // Calcular emolumento do usufruto
+                for (let faixa of faixasEmolumentos5e) {
+                    if (valorUsuf<= faixa.limite) {
+                        emolumentoTotal += faixa.valores[0];
+                        break;
+                    }
+                }
+            }
+
+            // Exibir o resultado formatado
+            document.getElementById('resultado').innerHTML = `O custo total estimado para o serviço é de R$ ${emolumentoTotal.toFixed(2)}`;
+        }
+
+        // Inicializar a visibilidade do campo de dívida
+        mostrarCampoDivida();
+    </script>
+
+</body>
+</html>
