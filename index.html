@@ -131,6 +131,7 @@
                 <option value="doacao">Escritura Pública de Doação</option>
                 <option value="doacaousuf">Escritura Pública de Doação com Usufruto</option>
                 <option value="formal">Formal de Partilha</option>
+                <option value="retificacaoarearural">Retificação de Área de Imóvel Rural</option>
             </select>
             <br><br>
             <label for="valor_imovel">Valor do Imóvel (R$)</label>
@@ -148,6 +149,7 @@
         <div class="result" id="resultado"></div>
         <div class="result2" id="resultado2"></div>
     </div>
+
 
     <div class="footer">
         <p><b>Observações importantes:</b> <br>
@@ -231,7 +233,7 @@
             { limite: Infinity, valores: [10467.62] }
             ];
 
-            // Tabela de emolumentos 5e (valores estimados de custos)
+            // Tabela de emolumentos 1c (valores estimados de custos)
             const faixasEmolumentos1c = [
             { limite: 1400, valores: [108.21] },
             { limite: 2720, valores: [176.52] },
@@ -260,23 +262,14 @@
             ];
             
 
-
             let emolumentoImovel = 0;
             let emolumentoDivida = 0;
             let emolumentoUsuf = 0;
             let emolumentoFinal = 0;
 
-            // Calcular emolumento com base no valor do imóvel
-            for (let faixa of faixasEmolumentos5e) {
-                if (valorImovel <= faixa.limite) {
-                    emolumentoImovel = faixa.valores[0];
-                    break;
-                }
-            }
-
             // Se o tipo de serviço for "contrato", incluir o valor da dívida no cálculo (se fornecido)
-            if (tipoServico === 'contrato') {
-                 // Inicializar a visibilidade do campo de dívida
+            if (tipoServico === 'contrato') {       
+                // Inicializar a visibilidade do campo de dívida
                 mostrarCampoDivida();
                 const valorDividaInput = obterValorNumerico(document.getElementById('valor_divida'));
 
@@ -298,9 +291,14 @@
 
             // Se o tipo de serviço for "doação com usufruto",    
             if (tipoServico === 'doacaousuf') {
+                // Calcular emolumento com base no valor do imóvel
+                for (let faixa of faixasEmolumentos5e) {
+                    if (valorImovel <= faixa.limite) {
+                    emolumentoImovel = faixa.valores[0];
+                    break;
+                }
+                } 
                 const valorUsufInput = (valorImovel/3)
-                
-
                 valorUsuf = parseFloat(valorUsufInput);
 
                 // Calcular emolumento do usufruto
@@ -312,8 +310,30 @@
                 }
             }
 
+            if (tipoServico === 'registro') {
+                // Calcular emolumento com base no valor do imóvel
+                for (let faixa of faixasEmolumentos5e) {
+                    if (valorImovel <= faixa.limite) {
+                    emolumentoImovel = faixa.valores[0];
+                    break;
+                }
+                } 
+                let prenotacao = 60.04;
+                let arquivamento = 131.90;
+                let certidao = 40.34;
+                emolumentoFinal = emolumentoImovel + prenotacao + arquivamento + certidao;
+                document.getElementById('resultado').innerHTML = `O custo total estimado para o serviço é de R$ ${emolumentoFinal.toFixed(2)}`;
+                document.getElementById('resultado2').innerHTML = `Discriminação dos valores <br><br>Prenotação: R$ ${prenotacao.toFixed(2)} <br>Registro da compra e venda: R$ ${emolumentoImovel.toFixed(2)}<br>10 arquivamentos: R$ ${arquivamento.toFixed(2)}<br>Certidão: R$ ${certidao.toFixed(2)}`;
+            }
             
             if (tipoServico === 'contrato') {
+                // Calcular emolumento com base no valor do imóvel
+                for (let faixa of faixasEmolumentos5e) {
+                    if (valorImovel <= faixa.limite) {
+                    emolumentoImovel = faixa.valores[0];
+                    break;
+                }
+                }
                 let prenotacao = 60.04;
                 let arquivamento = 206.80;
                 let certidao = 40.34;
@@ -322,7 +342,71 @@
                 document.getElementById('resultado2').innerHTML = `Discriminação dos valores <br><br>Prenotação: R$ ${prenotacao.toFixed(2)} <br>Registro da compra e venda: R$ ${emolumentoImovel.toFixed(2)}<br>Registro da alienação: R$ ${emolumentoDivida.toFixed(2)}<br>20 arquivamentos: R$ ${arquivamento.toFixed(2)}<br>Certidão: R$ ${certidao.toFixed(2)}`;
             }
 
-            
+            if (tipoServico === 'doacao') {
+                // Calcular emolumento com base no valor do imóvel
+                for (let faixa of faixasEmolumentos5e) {
+                    if (valorImovel <= faixa.limite) {
+                    emolumentoImovel = faixa.valores[0];
+                    break;
+                }
+                } 
+                let prenotacao = 60.04;
+                let arquivamento = 131.90;
+                let certidao = 40.34;
+                emolumentoFinal = emolumentoImovel + prenotacao + arquivamento + certidao;
+                document.getElementById('resultado').innerHTML = `O custo total estimado para o serviço é de R$ ${emolumentoFinal.toFixed(2)}`;
+                document.getElementById('resultado2').innerHTML = `Discriminação dos valores <br><br>Prenotação: R$ ${prenotacao.toFixed(2)} <br>Registro da doação: R$ ${emolumentoImovel.toFixed(2)}<br>10 arquivamentos: R$ ${arquivamento.toFixed(2)}<br>Certidão: R$ ${certidao.toFixed(2)}`;
+            }
+
+            if (tipoServico === 'doacaousuf') {
+                // Calcular emolumento com base no valor do imóvel
+                for (let faixa of faixasEmolumentos5e) {
+                    if (valorImovel <= faixa.limite) {
+                    emolumentoImovel = faixa.valores[0];
+                    break;
+                }
+                } 
+                let prenotacao = 60.04;
+                let arquivamento = 197.85;
+                let certidao = 40.34;
+                emolumentoFinal = emolumentoImovel + emolumentoUsuf + prenotacao + arquivamento + certidao;
+                document.getElementById('resultado').innerHTML = `O custo total estimado para o serviço é de R$ ${emolumentoFinal.toFixed(2)}`;
+                document.getElementById('resultado2').innerHTML = `Discriminação dos valores <br><br>Prenotação: R$ ${prenotacao.toFixed(2)} <br>Registro da compra e venda: R$ ${emolumentoImovel.toFixed(2)}<br>Registro do usufruto: R$ ${emolumentoUsuf.toFixed(2)}<br>15 arquivamentos: R$ ${arquivamento.toFixed(2)}<br>Certidão: R$ ${certidao.toFixed(2)}`;
+            }
+           
+            if (tipoServico === 'formal') {
+                // Calcular emolumento com base no valor do imóvel
+                for (let faixa of faixasEmolumentos5e) {
+                    if (valorImovel <= faixa.limite) {
+                    emolumentoImovel = faixa.valores[0];
+                    break;
+                }
+                } 
+                let prenotacao = 60.04;
+                let arquivamento = 527.60;
+                let certidao = 40.34;
+                emolumentoFinal = emolumentoImovel + prenotacao + arquivamento + certidao;
+                document.getElementById('resultado').innerHTML = `O custo total estimado para o serviço é de R$ ${emolumentoFinal.toFixed(2)}`;
+                document.getElementById('resultado2').innerHTML = `Discriminação dos valores <br><br>Prenotação: R$ ${prenotacao.toFixed(2)} <br>Registro do inventário/partilha: R$ ${emolumentoImovel.toFixed(2)}<br>40 arquivamentos: R$ ${arquivamento.toFixed(2)}<br>Certidão: R$ ${certidao.toFixed(2)}`;
+            }
+
+            if (tipoServico === 'retificacaoarearural') {
+                // Calcular emolumento com base no valor do imóvel
+                for (let faixa of faixasEmolumentos1c) {
+                    if (valorImovel <= faixa.limite) {
+                    emolumentoImovel = faixa.valores[0];
+                    break;
+                }
+                } 
+                let prenotacao = 60.04;
+                let arquivamento = 527.60;
+                let certidao = 40.34;
+                let abertura = 89.66;
+                let certificacao = 35.65;
+                emolumentoFinal = emolumentoImovel + prenotacao + arquivamento + certidao + abertura + certificacao;
+                document.getElementById('resultado').innerHTML = `O custo total estimado para o serviço é de R$ ${emolumentoFinal.toFixed(2)}`;
+                document.getElementById('resultado2').innerHTML = `Discriminação dos valores <br><br>Prenotação: R$ ${prenotacao.toFixed(2)} <br>Averbação da Retificação de área: R$ ${emolumentoImovel.toFixed(2)}<br>40 arquivamentos: R$ ${arquivamento.toFixed(2)}<br>Abertura da nova matrícula: R$ ${abertura.toFixed(2)}<br> Certificação do Incra: R$ ${certificacao.toFixed(2)} <br>Certidão: R$ ${certidao.toFixed(2)}`;
+            }
            
         }
     
