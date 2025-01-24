@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simulador de Custas</title>
+    
+    <!--Personalização-->
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -106,6 +108,7 @@
         <h1>Simulador de Custas</h1>
     </header>
     <br>
+    <!-- Logo-->
     <img src="logo.png" alt="Logotipo" style="display: block; margin: 0 auto 0px; max-width: 450px;">
 
     <div class="container">
@@ -120,12 +123,12 @@
             </select>
 
             <label for="valor_imovel">Valor do Imóvel (R$)</label>
-            <input type="number" id="valor_imovel" required placeholder="Informe o valor do imóvel" step="0.01">
+            <input type="text" id="valor_imovel" required placeholder="Informe o valor do imóvel" oninput="formatarMoeda(this)">
 
             <!-- Campo adicional para valor da dívida -->
             <div id="campo_divida" style="display: none;">
                 <label for="valor_divida">Valor da Dívida (R$)</label>
-                <input type="number" id="valor_divida" placeholder="Informe o valor da dívida" step="0.01">
+                <input type="text" id="valor_divida" required placeholder="Informe o valor da dívida" oninput="formatarMoeda(this)">
             </div>
 
             <button type="button" onclick="calcularCustos()">Calcular</button>
@@ -142,11 +145,12 @@
     </div>
 
     <script>
+        // Exibe o campo de dívida se o tipo de serviço for 'contrato'
         function mostrarCampoDivida() {
             const tipoServico = document.getElementById('tipo_servico').value;
             const campoDivida = document.getElementById('campo_divida');
 
-            // Exibe o campo de dívida se o tipo de serviço for 'contrato'
+            
             if (tipoServico === 'contrato') {
                 campoDivida.style.display = 'block';
             } else {
@@ -154,10 +158,27 @@
             }
         }
 
+        // Função para formatar valores como moeda brasileira
+        function formatarMoeda(input) {
+        let valor = input.value;
+        // Remove tudo que não é número
+        valor = valor.replace(/\D/g, "");
+
+        // Converte para formato de moeda
+        valor = (parseFloat(valor) / 100).toLocaleString("pt-BR", {
+            style: "currency",
+            currency: "BRL",
+        });
+
+        // Remove o símbolo "R$" para edição
+        input.value = valor.replace("R$", "").trim();
+        }    
+
+        // Função para calcular os custos totais
         function calcularCustos() {
             // Obtendo valores do formulário
             const tipoServico = document.getElementById('tipo_servico').value;
-            const valorImovel = parseFloat(document.getElementById('valor_imovel').value);
+            const valorImovel = obterValorNumerico(document.getElementById('valor_imovel'));
             let valorDivida = 0;
 
             // Validação de entrada do valor do imóvel
@@ -236,7 +257,9 @@
 
             // Se o tipo de serviço for "contrato", incluir o valor da dívida no cálculo (se fornecido)
             if (tipoServico === 'contrato') {
-                const valorDividaInput = document.getElementById('valor_divida').value;
+                
+                const valorDividaInput = obterValorNumerico(document.getElementById('valor_divida'));
+
                 if (!valorDividaInput || isNaN(valorDividaInput) || valorDividaInput <= 0) {
                     alert("Por favor, insira um valor válido para a dívida.");
                     return;
@@ -271,6 +294,12 @@
 
             // Exibir o resultado formatado
             document.getElementById('resultado').innerHTML = `O custo total estimado para o serviço é de R$ ${emolumentoTotal.toFixed(2)}`;
+        }
+
+        // Função para obter o valor numérico de um campo formatado
+        function obterValorNumerico(input) {
+        // Remove os separadores e converte para número
+        return parseFloat(input.value.replace(/\./g, "").replace(",", ".") || "0");
         }
 
         // Inicializar a visibilidade do campo de dívida
