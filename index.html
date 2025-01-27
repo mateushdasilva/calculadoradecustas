@@ -134,6 +134,7 @@
                 <option value="retificacaoarearural">Retificação de Área de Imóvel Rural</option>
                 <option value="retificacaoareaurbano">Retificação de Área de Imóvel Urbano</option>
                 <option value="desmembramentourbano">Desmembramento de imóvel urbano</option>
+                <option value="desmembramentorural">Desmembramento de imóvel rural</option>
             </select>
             <br><br>
              <!-- Campo select número de glebas -->
@@ -328,7 +329,40 @@
                             campoValor4.style.display = 'block';
                         break;
                     }
-                break;   
+                break;
+                case 'desmembramentorural':
+                    result.style.display = 'none';
+                    result2.style.display = 'none';
+                    campoImovel.style.display = 'none';
+                    campoDivida.style.display = 'none';
+                    campoGlebas.style.display = 'block';
+                    switch (campoGlebasValor){
+                        case 'inicio':
+                            campoValor1.style.display = 'none';    
+                            campoValor2.style.display = 'none';
+                            campoValor3.style.display = 'none';
+                            campoValor4.style.display = 'none';
+                        break;
+                        case '2':
+                            campoValor1.style.display = 'block';
+                            campoValor2.style.display = 'block';
+                            campoValor3.style.display = 'none';
+                            campoValor4.style.display = 'none';
+                        break;
+                        case '3':
+                            campoValor1.style.display = 'block';
+                            campoValor2.style.display = 'block';
+                            campoValor3.style.display = 'block';
+                            campoValor4.style.display = 'none';
+                        break;
+                        case '4':
+                            campoValor1.style.display = 'block';
+                            campoValor2.style.display = 'block';
+                            campoValor3.style.display = 'block';
+                            campoValor4.style.display = 'block';
+                        break;
+                    }
+                break;
                 
             }
         }
@@ -360,8 +394,12 @@
         function calcularCustos() {
             // Obtendo valores do formulário
             const tipoServico = document.getElementById('tipo_servico').value;
+            const campoGlebasValor = document.getElementById('numero_areas').value;
             const valorImovel = obterValorNumerico(document.getElementById('valor_imovel'));
             const valorgleba1 = obterValorNumerico(document.getElementById('valor_1'));
+            const valorgleba2 = obterValorNumerico(document.getElementById('valor_2'));
+            const valorgleba3 = obterValorNumerico(document.getElementById('valor_3'));
+            const valorgleba4 = obterValorNumerico(document.getElementById('valor_4'));
             const result = document.getElementById('resultado');
             const result2 = document.getElementById('resultado2');
             let valorDivida = 0;
@@ -426,7 +464,10 @@
             let emolumentoImovel = 0;
             let emolumentoDivida = 0;
             let emolumentoUsuf = 0;
-            let emolumentogleba1 =0
+            let emolumentogleba1 =0;
+            let emolumentogleba2 =0;
+            let emolumentogleba3 =0;
+            let emolumentogleba4 =0;
             let emolumentoFinal = 0;
 
             // Se o tipo de serviço for "contrato", incluir o valor da dívida no cálculo
@@ -500,6 +541,7 @@
                 }
             }
 
+            // Se registro igual compra e venda
             if (tipoServico === 'registro') {
                 // Validação de entrada do valor do imóvel
                 if (isNaN(valorImovel) || valorImovel <= 0) {
@@ -522,6 +564,7 @@
                 document.getElementById('resultado2').innerHTML = `Discriminação dos valores <br><br>Prenotação: R$ ${prenotacao.toFixed(2)} <br>Registro da compra e venda: R$ ${emolumentoImovel.toFixed(2)}<br>10 arquivamentos: R$ ${arquivamento.toFixed(2)}<br>Certidão: R$ ${certidao.toFixed(2)}`;
             }
 
+            // se registro igual doação
             if (tipoServico === 'doacao') {
                 // Validação de entrada do valor do imóvel
                 if (isNaN(valorImovel) || valorImovel <= 0) {
@@ -544,6 +587,7 @@
                 document.getElementById('resultado2').innerHTML = `Discriminação dos valores <br><br>Prenotação: R$ ${prenotacao.toFixed(2)} <br>Registro da doação: R$ ${emolumentoImovel.toFixed(2)}<br>10 arquivamentos: R$ ${arquivamento.toFixed(2)}<br>Certidão: R$ ${certidao.toFixed(2)}`;
             }
 
+            // se registro igual doação com usufruto
             if (tipoServico === 'doacaousuf') {
                 // Validação de entrada do valor do imóvel
                 if (isNaN(valorImovel) || valorImovel <= 0) {
@@ -564,7 +608,8 @@
                 document.getElementById('resultado').innerHTML = `O custo total estimado para o serviço é de R$ ${emolumentoFinal.toFixed(2)}`;
                 document.getElementById('resultado2').innerHTML = `Discriminação dos valores <br><br>Prenotação: R$ ${prenotacao.toFixed(2)} <br>Registro da compra e venda: R$ ${emolumentoImovel.toFixed(2)}<br>Registro do usufruto: R$ ${emolumentoUsuf.toFixed(2)}<br>15 arquivamentos: R$ ${arquivamento.toFixed(2)}<br>Certidão: R$ ${certidao.toFixed(2)}`;
             }
-           
+            
+            // se registro igual formal de partilha
             if (tipoServico === 'formal') {
                 // Validação de entrada do valor do imóvel
                   if (isNaN(valorImovel) || valorImovel <= 0) {
@@ -586,6 +631,7 @@
                 document.getElementById('resultado2').innerHTML = `Discriminação dos valores <br><br>Prenotação: R$ ${prenotacao.toFixed(2)} <br>Registro do inventário/partilha: R$ ${emolumentoImovel.toFixed(2)}<br>40 arquivamentos: R$ ${arquivamento.toFixed(2)}<br>Certidão: R$ ${certidao.toFixed(2)}`;
             }
 
+            // se registro igual retificação de área de imóvel rural
             if (tipoServico === 'retificacaoarearural') {
                 // Validação de entrada do valor do imóvel
                 if (isNaN(valorImovel) || valorImovel <= 0) {
@@ -609,6 +655,7 @@
                 document.getElementById('resultado2').innerHTML = `Discriminação dos valores <br><br>Prenotação: R$ ${prenotacao.toFixed(2)} <br>Averbação da Retificação de área: R$ ${emolumentoImovel.toFixed(2)}<br>40 arquivamentos: R$ ${arquivamento.toFixed(2)}<br>Abertura da nova matrícula: R$ ${abertura.toFixed(2)}<br> Certificação do Incra: R$ ${certificacao.toFixed(2)} <br>Certidão: R$ ${certidao.toFixed(2)}`;
             }
 
+            // se registro igual retificação de área de imóvel urbano
             if (tipoServico === 'retificacaoareaurbano') {
                 // Validação de entrada do valor do imóvel
                 if (isNaN(valorImovel) || valorImovel <= 0) {
@@ -631,7 +678,9 @@
                 document.getElementById('resultado2').innerHTML = `Discriminação dos valores <br><br>Prenotação: R$ ${prenotacao.toFixed(2)} <br>Averbação da Retificação de área: R$ ${emolumentoImovel.toFixed(2)}<br>30 arquivamentos: R$ ${arquivamento.toFixed(2)}<br>Abertura da nova matrícula: R$ ${abertura.toFixed(2)}<br>Certidão: R$ ${certidao.toFixed(2)}`;
             }
             
-            if (tipoServico === 'desmembramentourbano') {
+            // se registro igual desmembramento de imóvel urbano
+            if (tipoServico === 'desmembramentourbano' || tipoServico === 'desmembramentorural') {
+                
                 // Validação de entrada do valor da gleba 1
                 if (isNaN(valorgleba1) || valorgleba1 <= 0) {
                     alert("Por favor, insira um valor válido para a gleba 1");
@@ -644,14 +693,142 @@
                     break;
                 }
                 } 
+
+                switch (campoGlebasValor){
+                        case '2':
+                            // Validação de entrada do valor da gleba 2
+                            if (isNaN(valorgleba2) || valorgleba2 <= 0) {
+                                alert("Por favor, insira um valor válido para a gleba 2");
+                                return;
+                            }
+                            // Calcular emolumento da gleba 2
+                            for (let faixa of faixasEmolumentos1c) {
+                                if (valorgleba2 <= faixa.limite) {
+                                emolumentogleba2 = faixa.valores[0];
+                                break;
+                            }
+                            }   
+                        break;
+                        case '3':
+                           // Validação de entrada do valor da gleba 2
+                           if (isNaN(valorgleba2) || valorgleba2 <= 0) {
+                                alert("Por favor, insira um valor válido para a gleba 2");
+                                return;
+                            }
+                            // Calcular emolumento da gleba 2
+                            for (let faixa of faixasEmolumentos1c) {
+                                if (valorgleba2 <= faixa.limite) {
+                                emolumentogleba2 = faixa.valores[0];
+                                break;
+                            }
+                            }   
+                                // Validação de entrada do valor da gleba 3
+                           if (isNaN(valorgleba3) || valorgleba3 <= 0) {
+                                alert("Por favor, insira um valor válido para a gleba 3");
+                                return;
+                            }
+                            // Calcular emolumento da gleba 3
+                            for (let faixa of faixasEmolumentos1c) {
+                                if (valorgleba3 <= faixa.limite) {
+                                emolumentogleba3 = faixa.valores[0];
+                                break;
+                            }
+                            } 
+                        break;
+                        case '4':
+                             // Validação de entrada do valor da gleba 2
+                           if (isNaN(valorgleba2) || valorgleba2 <= 0) {
+                                alert("Por favor, insira um valor válido para a gleba 2");
+                                return;
+                            }
+                            // Calcular emolumento da gleba 2
+                            for (let faixa of faixasEmolumentos1c) {
+                                if (valorgleba2 <= faixa.limite) {
+                                emolumentogleba2 = faixa.valores[0];
+                                break;
+                            }
+                            }   
+                                // Validação de entrada do valor da gleba 3
+                           if (isNaN(valorgleba3) || valorgleba3 <= 0) {
+                                alert("Por favor, insira um valor válido para a gleba 3");
+                                return;
+                            }
+                            // Calcular emolumento da gleba 3
+                            for (let faixa of faixasEmolumentos1c) {
+                                if (valorgleba3 <= faixa.limite) {
+                                emolumentogleba3 = faixa.valores[0];
+                                break;
+                            }
+                            } 
+                                  // Validação de entrada do valor da gleba 4
+                           if (isNaN(valorgleba4) || valorgleba4 <= 0) {
+                                alert("Por favor, insira um valor válido para a gleba 4");
+                                return;
+                            }
+                            // Calcular emolumento da gleba 4
+                            for (let faixa of faixasEmolumentos1c) {
+                                if (valorgleba4 <= faixa.limite) {
+                                emolumentogleba4 = faixa.valores[0];
+                                break;
+                            }
+                            } 
+                        break;
+                    }
+
                 let prenotacao = 62.89;
                 let arquivamento = 395.70;
+                let desmembramento = 35.65;
                 let certidao = 40.34;
                 let abertura = 89.66;
-                let desmembramento = 35.65;
-                emolumentoFinal = emolumentogleba1 + prenotacao + arquivamento + certidao + abertura + desmembramento;
-                document.getElementById('resultado').innerHTML = `O custo total estimado para o serviço é de R$ ${emolumentoFinal.toFixed(2)}`;
-                document.getElementById('resultado2').innerHTML = `Discriminação dos valores <br><br>Prenotação: R$ ${prenotacao.toFixed(2)} <br>Averbação do desmembramento: R$ ${desmembramento.toFixed(2)}<br>Inserção de medidas perímetrais da gleba 1: R$ ${emolumentogleba1.toFixed(2)}<br>30 arquivamentos: R$ ${arquivamento.toFixed(2)}<br>Abertura da nova matrícula: R$ ${abertura.toFixed(2)}<br>Certidão: R$ ${certidao.toFixed(2)}`;
+                let certificacao = 35.65;
+                
+                
+                switch (campoGlebasValor){
+                    case '2':
+                        certidao = certidao * 2;
+                        abertura = abertura * 2;
+                        if (tipoServico === 'desmembramentourbano'){
+                            emolumentoFinal = emolumentogleba1 + emolumentogleba2 + prenotacao + arquivamento + certidao + abertura + desmembramento;
+                            document.getElementById('resultado').innerHTML = `O custo total estimado para o serviço é de R$ ${emolumentoFinal.toFixed(2)}`;
+                            document.getElementById('resultado2').innerHTML = `Discriminação dos valores <br><br>Prenotação: R$ ${prenotacao.toFixed(2)} <br>Averbação do desmembramento: R$ ${desmembramento.toFixed(2)}<br>Inserção de medidas perímetrais da gleba 1: R$ ${emolumentogleba1.toFixed(2)}<br>Inserção de medidas perímetrais da gleba 2: R$ ${emolumentogleba2.toFixed(2)}<br>30 arquivamentos: R$ ${arquivamento.toFixed(2)}<br>Abertura das novas matrículas: R$ ${abertura.toFixed(2)}<br>Certidões: R$ ${certidao.toFixed(2)}`;
+                        } 
+                        if (tipoServico === 'desmembramentorural'){
+                            emolumentoFinal = emolumentogleba1 + emolumentogleba2 + prenotacao + arquivamento + certidao + abertura + desmembramento + certificacao;
+                            document.getElementById('resultado').innerHTML = `O custo total estimado para o serviço é de R$ ${emolumentoFinal.toFixed(2)}`;
+                            document.getElementById('resultado2').innerHTML = `Discriminação dos valores <br><br>Prenotação: R$ ${prenotacao.toFixed(2)} <br>Averbação do desmembramento: R$ ${desmembramento.toFixed(2)}<br>Inserção de medidas perímetrais da gleba 1: R$ ${emolumentogleba1.toFixed(2)}<br>Inserção de medidas perímetrais da gleba 2: R$ ${emolumentogleba2.toFixed(2)}<br>30 arquivamentos: R$ ${arquivamento.toFixed(2)}<br>Abertura das novas matrículas: R$ ${abertura.toFixed(2)}<br>Certificação do INCRA: R$ ${certificacao.toFixed(2)}<br>Certidões: R$ ${certidao.toFixed(2)}`;
+                        }                      
+                        
+                    break;
+                    case '3':
+                        certidao = certidao * 3;
+                        abertura = abertura * 3;
+                        if (tipoServico === 'desmembramentourbano'){
+                            emolumentoFinal = emolumentogleba1 + emolumentogleba2 + emolumentogleba3 + prenotacao + arquivamento + certidao + abertura + desmembramento; 
+                            document.getElementById('resultado').innerHTML = `O custo total estimado para o serviço é de R$ ${emolumentoFinal.toFixed(2)}`; 
+                            document.getElementById('resultado2').innerHTML = `Discriminação dos valores <br><br>Prenotação: R$ ${prenotacao.toFixed(2)} <br>Averbação do desmembramento: R$ ${desmembramento.toFixed(2)}<br>Inserção de medidas perímetrais da gleba 1: R$ ${emolumentogleba1.toFixed(2)}<br>Inserção de medidas perímetrais da gleba 2: R$ ${emolumentogleba2.toFixed(2)}<br>Inserção de medidas perímetrais da gleba 3: R$ ${emolumentogleba3.toFixed(2)}<br>30 arquivamentos: R$ ${arquivamento.toFixed(2)}<br>Abertura das novas matrículas: R$ ${abertura.toFixed(2)}<br>Certidões: R$ ${certidao.toFixed(2)}`;
+                        }
+                        if (tipoServico === 'desmembramentorural'){
+                            emolumentoFinal = emolumentogleba1 + emolumentogleba2 + emolumentogleba3 + prenotacao + arquivamento + certidao + abertura + desmembramento + certificacao; 
+                            document.getElementById('resultado').innerHTML = `O custo total estimado para o serviço é de R$ ${emolumentoFinal.toFixed(2)}`; 
+                            document.getElementById('resultado2').innerHTML = `Discriminação dos valores <br><br>Prenotação: R$ ${prenotacao.toFixed(2)} <br>Averbação do desmembramento: R$ ${desmembramento.toFixed(2)}<br>Inserção de medidas perímetrais da gleba 1: R$ ${emolumentogleba1.toFixed(2)}<br>Inserção de medidas perímetrais da gleba 2: R$ ${emolumentogleba2.toFixed(2)}<br>Inserção de medidas perímetrais da gleba 3: R$ ${emolumentogleba3.toFixed(2)}<br>30 arquivamentos: R$ ${arquivamento.toFixed(2)}<br>Abertura das novas matrículas: R$ ${abertura.toFixed(2)}<br>Certificação do INCRA: R$ ${certificacao.toFixed(2)}<br>Certidões: R$ ${certidao.toFixed(2)}`;
+                        }
+                    break;
+                    case '4':
+                        certidao = certidao * 4;
+                        abertura = abertura * 4;
+                        if (tipoServico === 'desmembramentourbano'){
+                            emolumentoFinal = emolumentogleba1 + emolumentogleba2 + emolumentogleba3 + emolumentogleba4 + prenotacao + arquivamento + certidao + abertura + desmembramento; 
+                            document.getElementById('resultado').innerHTML = `O custo total estimado para o serviço é de R$ ${emolumentoFinal.toFixed(2)}`; 
+                            document.getElementById('resultado2').innerHTML = `Discriminação dos valores <br><br>Prenotação: R$ ${prenotacao.toFixed(2)} <br>Averbação do desmembramento: R$ ${desmembramento.toFixed(2)}<br>Inserção de medidas perímetrais da gleba 1: R$ ${emolumentogleba1.toFixed(2)}<br>Inserção de medidas perímetrais da gleba 2: R$ ${emolumentogleba2.toFixed(2)}<br>Inserção de medidas perímetrais da gleba 3: R$ ${emolumentogleba3.toFixed(2)}<br>Inserção de medidas perímetrais da gleba 4: R$ ${emolumentogleba4.toFixed(2)}<br>30 arquivamentos: R$ ${arquivamento.toFixed(2)}<br>Abertura das novas matrículas: R$ ${abertura.toFixed(2)}<br>Certidões: R$ ${certidao.toFixed(2)}`;
+                        }
+                        if (tipoServico === 'desmembramentorural'){
+                            emolumentoFinal = emolumentogleba1 + emolumentogleba2 + emolumentogleba3 + emolumentogleba4 + prenotacao + arquivamento + certidao + abertura + desmembramento + certificacao; 
+                            document.getElementById('resultado').innerHTML = `O custo total estimado para o serviço é de R$ ${emolumentoFinal.toFixed(2)}`; 
+                            document.getElementById('resultado2').innerHTML = `Discriminação dos valores <br><br>Prenotação: R$ ${prenotacao.toFixed(2)} <br>Averbação do desmembramento: R$ ${desmembramento.toFixed(2)}<br>Inserção de medidas perímetrais da gleba 1: R$ ${emolumentogleba1.toFixed(2)}<br>Inserção de medidas perímetrais da gleba 2: R$ ${emolumentogleba2.toFixed(2)}<br>Inserção de medidas perímetrais da gleba 3: R$ ${emolumentogleba3.toFixed(2)}<br>Inserção de medidas perímetrais da gleba 4: R$ ${emolumentogleba4.toFixed(2)}<br>30 arquivamentos: R$ ${arquivamento.toFixed(2)}<br>Abertura das novas matrículas: R$ ${abertura.toFixed(2)}<br>Certificação do INCRA: R$ ${certificacao.toFixed(2)}<br>Certidões: R$ ${certidao.toFixed(2)}`;
+                        }
+                    break;
+
+                }
             }
 
 
