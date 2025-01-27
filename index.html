@@ -121,8 +121,6 @@
     <header>
         <h1>Simulador de Custas</h1>
     </header>
-    <!-- Logo-->
-    <img src="logo.png" alt="logotipo" class="logotipo">
     <div class="container">
         <form id="simuladorForm">
             <label for="tipo_servico">Selecione o Tipo de Serviço</label>
@@ -138,7 +136,16 @@
                 <option value="desmembramentourbano">Desmembramento de imóvel urbano</option>
             </select>
             <br><br>
-            
+             <!-- Campo select número de glebas -->
+            <div id="campoSelectGlebas" style="display: none;">
+                <label for="numero_areas">Selecione o número de áreas desmembradas</label>
+                <select id="numero_areas" required onchange="mostrarCampos()">
+                <option value="inicio">Selecione</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+            </select>
+            </div>
             <!-- Campo valor do imóvel -->
             <div id="campo_imovel" style="display: none;">
                 <label for="valor_imovel">Valor do Imóvel (R$)</label>
@@ -154,7 +161,21 @@
                 <label for="valor_1">Valor do Lote/Gleba/Área 1 (R$)</label>
                 <input type="text" id="valor_1" required placeholder="Informe o valor do lote/gleba/área 1" oninput="formatarMoeda(this)">
             </div>
-
+             <!-- Campo valor da gleba/área 2 -->
+             <div id="campo_valor2" style="display: none;">
+                <label for="valor_2">Valor do Lote/Gleba/Área 2 (R$)</label>
+                <input type="text" id="valor_2" required placeholder="Informe o valor do lote/gleba/área 2" oninput="formatarMoeda(this)">
+            </div>
+            <!-- Campo valor da gleba/área 3 -->
+            <div id="campo_valor3" style="display: none;">
+                <label for="valor_3">Valor do Lote/Gleba/Área 3 (R$)</label>
+                <input type="text" id="valor_3" required placeholder="Informe o valor do lote/gleba/área 3" oninput="formatarMoeda(this)">
+            </div>
+             <!-- Campo valor da gleba/área 4 -->
+             <div id="campo_valor4" style="display: none;">
+                <label for="valor_4">Valor do Lote/Gleba/Área 4 (R$)</label>
+                <input type="text" id="valor_4" required placeholder="Informe o valor do lote/gleba/área 4" oninput="formatarMoeda(this)">
+            </div>
             <!-- Botão Calcular -->
             <button type="button" onclick="calcularCustos()">Calcular</button>
         </form>
@@ -176,9 +197,14 @@
         // Exibe os campos de acordo com o tipo do serviço
         function mostrarCampos() {
             const tipoServico = document.getElementById('tipo_servico').value;
+            const campoGlebas = document.getElementById('campoSelectGlebas');
+            const campoGlebasValor = document.getElementById('numero_areas').value;
             const campoImovel = document.getElementById('campo_imovel');
             const campoDivida = document.getElementById('campo_divida');
             const campoValor1 = document.getElementById('campo_valor1');
+            const campoValor2 = document.getElementById('campo_valor2');
+            const campoValor3 = document.getElementById('campo_valor3');
+            const campoValor4 = document.getElementById('campo_valor4');
             const result = document.getElementById('resultado');
             const result2 = document.getElementById('resultado2');
             switch (tipoServico) {
@@ -187,64 +213,122 @@
                     result2.style.display = 'none';    
                     campoImovel.style.display = 'none';                    
                     campoDivida.style.display = 'none';
+                    campoGlebas.style.display = 'none';
                     campoValor1.style.display = 'none';
+                    campoValor2.style.display = 'none';
+                    campoValor3.style.display = 'none';
+                    campoValor4.style.display = 'none';
                     break
                 case 'registro':
                     result.style.display = 'none';
                     result2.style.display = 'none';
                     campoImovel.style.display = 'block';
                     campoDivida.style.display = 'none';
+                    campoGlebas.style.display = 'none';
                     campoValor1.style.display = 'none';
+                    campoValor2.style.display = 'none';
+                    campoValor3.style.display = 'none';
+                    campoValor4.style.display = 'none';
                     break;
                 case 'contrato':
                     result.style.display = 'none';
                     result2.style.display = 'none';
                     campoImovel.style.display = 'block';
                     campoDivida.style.display = 'block';
+                    campoGlebas.style.display = 'none';
                     campoValor1.style.display = 'none';
+                    campoValor2.style.display = 'none';
+                    campoValor3.style.display = 'none';
+                    campoValor4.style.display = 'none';
                     break;
                 case 'doacao':
                     result.style.display = 'none';
                     result2.style.display = 'none';
                     campoImovel.style.display = 'block';
                     campoDivida.style.display = 'none';
+                    campoGlebas.style.display = 'none';
                     campoValor1.style.display = 'none';
+                    campoValor2.style.display = 'none';
+                    campoValor3.style.display = 'none';
+                    campoValor4.style.display = 'none';
                     break;
                 case 'doacaousuf':
                     result.style.display = 'none';
                     result2.style.display = 'none';
                     campoImovel.style.display = 'block';
                     campoDivida.style.display = 'none';
+                    campoGlebas.style.display = 'none';
                     campoValor1.style.display = 'none';
+                    campoValor2.style.display = 'none';
+                    campoValor3.style.display = 'none';
+                    campoValor4.style.display = 'none';
                     break;
                 case 'formal':
                     result.style.display = 'none';
                     result2.style.display = 'none';
                     campoImovel.style.display = 'block';
                     campoDivida.style.display = 'none';
+                    campoGlebas.style.display = 'none';
                     campoValor1.style.display = 'none';
+                    campoValor2.style.display = 'none';
+                    campoValor3.style.display = 'none';
+                    campoValor4.style.display = 'none';
                     break;   
                 case 'retificacaoarearural':
                     result.style.display = 'none';
                     result2.style.display = 'none';
                     campoImovel.style.display = 'block';
                     campoDivida.style.display = 'none';
+                    campoGlebas.style.display = 'none';
                     campoValor1.style.display = 'none';
+                    campoValor2.style.display = 'none';
+                    campoValor3.style.display = 'none';
+                    campoValor4.style.display = 'none';
                     break;
                 case 'retificacaoareaurbano':
                     result.style.display = 'none';
                     result2.style.display = 'none';
                     campoImovel.style.display = 'block';
                     campoDivida.style.display = 'none';
+                    campoGlebas.style.display = 'none';
                     campoValor1.style.display = 'none';
+                    campoValor2.style.display = 'none';
+                    campoValor3.style.display = 'none';
+                    campoValor4.style.display = 'none';
                     break;
                 case 'desmembramentourbano':
                     result.style.display = 'none';
                     result2.style.display = 'none';
                     campoImovel.style.display = 'none';
                     campoDivida.style.display = 'none';
-                    campoValor1.style.display = 'block';
-                    break;   
+                    campoGlebas.style.display = 'block';
+                    switch (campoGlebasValor){
+                        case 'inicio':
+                            campoValor1.style.display = 'none';    
+                            campoValor2.style.display = 'none';
+                            campoValor3.style.display = 'none';
+                            campoValor4.style.display = 'none';
+                        break;
+                        case '2':
+                            campoValor1.style.display = 'block';
+                            campoValor2.style.display = 'block';
+                            campoValor3.style.display = 'none';
+                            campoValor4.style.display = 'none';
+                        break;
+                        case '3':
+                            campoValor1.style.display = 'block';
+                            campoValor2.style.display = 'block';
+                            campoValor3.style.display = 'block';
+                            campoValor4.style.display = 'none';
+                        break;
+                        case '4':
+                            campoValor1.style.display = 'block';
+                            campoValor2.style.display = 'block';
+                            campoValor3.style.display = 'block';
+                            campoValor4.style.display = 'block';
+                        break;
+                    }
+                break;   
                 
             }
         }
@@ -277,6 +361,7 @@
             // Obtendo valores do formulário
             const tipoServico = document.getElementById('tipo_servico').value;
             const valorImovel = obterValorNumerico(document.getElementById('valor_imovel'));
+            const valorgleba1 = obterValorNumerico(document.getElementById('valor_1'));
             const result = document.getElementById('resultado');
             const result2 = document.getElementById('resultado2');
             let valorDivida = 0;
@@ -341,6 +426,7 @@
             let emolumentoImovel = 0;
             let emolumentoDivida = 0;
             let emolumentoUsuf = 0;
+            let emolumentogleba1 =0
             let emolumentoFinal = 0;
 
             // Se o tipo de serviço for "contrato", incluir o valor da dívida no cálculo
@@ -523,7 +609,7 @@
                 document.getElementById('resultado2').innerHTML = `Discriminação dos valores <br><br>Prenotação: R$ ${prenotacao.toFixed(2)} <br>Averbação da Retificação de área: R$ ${emolumentoImovel.toFixed(2)}<br>40 arquivamentos: R$ ${arquivamento.toFixed(2)}<br>Abertura da nova matrícula: R$ ${abertura.toFixed(2)}<br> Certificação do Incra: R$ ${certificacao.toFixed(2)} <br>Certidão: R$ ${certidao.toFixed(2)}`;
             }
 
-             if (tipoServico === 'retificacaoareaurbano') {
+            if (tipoServico === 'retificacaoareaurbano') {
                 // Validação de entrada do valor do imóvel
                 if (isNaN(valorImovel) || valorImovel <= 0) {
                     alert("Por favor, insira um valor válido para o imóvel.");
@@ -545,6 +631,30 @@
                 document.getElementById('resultado2').innerHTML = `Discriminação dos valores <br><br>Prenotação: R$ ${prenotacao.toFixed(2)} <br>Averbação da Retificação de área: R$ ${emolumentoImovel.toFixed(2)}<br>30 arquivamentos: R$ ${arquivamento.toFixed(2)}<br>Abertura da nova matrícula: R$ ${abertura.toFixed(2)}<br>Certidão: R$ ${certidao.toFixed(2)}`;
             }
             
+            if (tipoServico === 'desmembramentourbano') {
+                // Validação de entrada do valor da gleba 1
+                if (isNaN(valorgleba1) || valorgleba1 <= 0) {
+                    alert("Por favor, insira um valor válido para a gleba 1");
+                    return;
+                }
+                // Calcular emolumento da gleba 1
+                for (let faixa of faixasEmolumentos1c) {
+                    if (valorgleba1 <= faixa.limite) {
+                    emolumentogleba1 = faixa.valores[0];
+                    break;
+                }
+                } 
+                let prenotacao = 62.89;
+                let arquivamento = 395.70;
+                let certidao = 40.34;
+                let abertura = 89.66;
+                let desmembramento = 35.65;
+                emolumentoFinal = emolumentogleba1 + prenotacao + arquivamento + certidao + abertura + desmembramento;
+                document.getElementById('resultado').innerHTML = `O custo total estimado para o serviço é de R$ ${emolumentoFinal.toFixed(2)}`;
+                document.getElementById('resultado2').innerHTML = `Discriminação dos valores <br><br>Prenotação: R$ ${prenotacao.toFixed(2)} <br>Averbação do desmembramento: R$ ${desmembramento.toFixed(2)}<br>Inserção de medidas perímetrais da gleba 1: R$ ${emolumentogleba1.toFixed(2)}<br>30 arquivamentos: R$ ${arquivamento.toFixed(2)}<br>Abertura da nova matrícula: R$ ${abertura.toFixed(2)}<br>Certidão: R$ ${certidao.toFixed(2)}`;
+            }
+
+
             result.style.display = 'block';
             result2.style.display = 'block';
         }
