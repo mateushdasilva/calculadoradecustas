@@ -113,6 +113,7 @@
         #campo_divida {
             margin-top: 20px;
         }
+
     </style>
 </head>
 <body>
@@ -125,7 +126,8 @@
     <div class="container">
         <form id="simuladorForm">
             <label for="tipo_servico">Selecione o Tipo de Serviço</label>
-            <select id="tipo_servico" required onchange="mostrarCampoDivida()">
+            <select id="tipo_servico" required onchange="mostrarCampos()">
+                <option value="inicio">Escolha o tipo de registro/averbação</option>
                 <option value="registro">Escritura pública de Compra e venda</option>
                 <option value="contrato">Contrato de Compra e Venda com Alienação</option>
                 <option value="doacao">Escritura Pública de Doação</option>
@@ -133,22 +135,32 @@
                 <option value="formal">Formal de Partilha</option>
                 <option value="retificacaoarearural">Retificação de Área de Imóvel Rural</option>
                 <option value="retificacaoareaurbano">Retificação de Área de Imóvel Urbano</option>
+                <option value="desmembramentourbano">Desmembramento de imóvel urbano</option>
             </select>
             <br><br>
-            <label for="valor_imovel">Valor do Imóvel (R$)</label>
-            <input type="text" id="valor_imovel" required placeholder="Informe o valor do imóvel" oninput="formatarMoeda(this)">
-
-            <!-- Campo adicional para valor da dívida -->
+            
+            <!-- Campo valor do imóvel -->
+            <div id="campo_imovel" style="display: none;">
+                <label for="valor_imovel">Valor do Imóvel (R$)</label>
+                <input type="text" id="valor_imovel" required placeholder="Informe o valor do imóvel" oninput="formatarMoeda(this)">
+            </div>
+            <!-- Campo valor da dívida -->
             <div id="campo_divida" style="display: none;">
                 <label for="valor_divida">Valor da Dívida (R$)</label>
                 <input type="text" id="valor_divida" required placeholder="Informe o valor da dívida" oninput="formatarMoeda(this)">
             </div>
+            <!-- Campo valor da gleba/área 1 -->
+            <div id="campo_valor1" style="display: none;">
+                <label for="valor_1">Valor do Lote/Gleba/Área 1 (R$)</label>
+                <input type="text" id="valor_1" required placeholder="Informe o valor do lote/gleba/área 1" oninput="formatarMoeda(this)">
+            </div>
 
+            <!-- Botão Calcular -->
             <button type="button" onclick="calcularCustos()">Calcular</button>
         </form>
-
-        <div class="result" id="resultado"></div>
-        <div class="result2" id="resultado2"></div>
+        <!-- Divs de resultados -->
+        <div class="result" id="resultado" style="display: none;"></div>
+        <div class="result2" id="resultado2" style="display: none;"></div>
     </div>
 
 
@@ -160,20 +172,87 @@
     </div>
 
     <script>
-        // Exibe o campo de dívida se o tipo de serviço for 'contrato'
-        function mostrarCampoDivida() {
+        
+        // Exibe os campos de acordo com o tipo do serviço
+        function mostrarCampos() {
             const tipoServico = document.getElementById('tipo_servico').value;
+            const campoImovel = document.getElementById('campo_imovel');
             const campoDivida = document.getElementById('campo_divida');
-            if (tipoServico === 'contrato') {
-                campoDivida.style.display = 'block';
-            } else {
-                campoDivida.style.display = 'none';
+            const campoValor1 = document.getElementById('campo_valor1');
+            const result = document.getElementById('resultado');
+            const result2 = document.getElementById('resultado2');
+            switch (tipoServico) {
+                case 'inicio':
+                    result.style.display = 'none';
+                    result2.style.display = 'none';    
+                    campoImovel.style.display = 'none';                    
+                    campoDivida.style.display = 'none';
+                    campoValor1.style.display = 'none';
+                    break
+                case 'registro':
+                    result.style.display = 'none';
+                    result2.style.display = 'none';
+                    campoImovel.style.display = 'block';
+                    campoDivida.style.display = 'none';
+                    campoValor1.style.display = 'none';
+                    break;
+                case 'contrato':
+                    result.style.display = 'none';
+                    result2.style.display = 'none';
+                    campoImovel.style.display = 'block';
+                    campoDivida.style.display = 'block';
+                    campoValor1.style.display = 'none';
+                    break;
+                case 'doacao':
+                    result.style.display = 'none';
+                    result2.style.display = 'none';
+                    campoImovel.style.display = 'block';
+                    campoDivida.style.display = 'none';
+                    campoValor1.style.display = 'none';
+                    break;
+                case 'doacaousuf':
+                    result.style.display = 'none';
+                    result2.style.display = 'none';
+                    campoImovel.style.display = 'block';
+                    campoDivida.style.display = 'none';
+                    campoValor1.style.display = 'none';
+                    break;
+                case 'formal':
+                    result.style.display = 'none';
+                    result2.style.display = 'none';
+                    campoImovel.style.display = 'block';
+                    campoDivida.style.display = 'none';
+                    campoValor1.style.display = 'none';
+                    break;   
+                case 'retificacaoarearural':
+                    result.style.display = 'none';
+                    result2.style.display = 'none';
+                    campoImovel.style.display = 'block';
+                    campoDivida.style.display = 'none';
+                    campoValor1.style.display = 'none';
+                    break;
+                case 'retificacaoareaurbano':
+                    result.style.display = 'none';
+                    result2.style.display = 'none';
+                    campoImovel.style.display = 'block';
+                    campoDivida.style.display = 'none';
+                    campoValor1.style.display = 'none';
+                    break;
+                case 'desmembramentourbano':
+                    result.style.display = 'none';
+                    result2.style.display = 'none';
+                    campoImovel.style.display = 'none';
+                    campoDivida.style.display = 'none';
+                    campoValor1.style.display = 'block';
+                    break;   
+                
             }
         }
 
         // Função para formatar valores como moeda brasileira
         function formatarMoeda(input) {
         let valor = input.value;
+        
         // Remove tudo que não é número
         valor = valor.replace(/\D/g, "");
 
@@ -198,13 +277,9 @@
             // Obtendo valores do formulário
             const tipoServico = document.getElementById('tipo_servico').value;
             const valorImovel = obterValorNumerico(document.getElementById('valor_imovel'));
+            const result = document.getElementById('resultado');
+            const result2 = document.getElementById('resultado2');
             let valorDivida = 0;
-
-            // Validação de entrada do valor do imóvel
-            if (isNaN(valorImovel) || valorImovel <= 0) {
-                alert("Por favor, insira um valor válido para o imóvel.");
-                return;
-            }
 
             // Tabela de emolumentos 5e (valores estimados de custos)
             const faixasEmolumentos5e = [
@@ -268,12 +343,18 @@
             let emolumentoUsuf = 0;
             let emolumentoFinal = 0;
 
-            // Se o tipo de serviço for "contrato", incluir o valor da dívida no cálculo (se fornecido)
+            // Se o tipo de serviço for "contrato", incluir o valor da dívida no cálculo
             if (tipoServico === 'contrato') {       
                 // Inicializar a visibilidade do campo de dívida
-                mostrarCampoDivida();
+                //mostrarCampos();
                 const valorDividaInput = obterValorNumerico(document.getElementById('valor_divida'));
 
+                // Validação de entrada do valor do imóvel
+                if (isNaN(valorImovel) || valorImovel <= 0) {
+                    alert("Por favor, insira um valor válido para o imóvel.");
+                    return;
+                }
+                // Validação de entrada para o valor da dívida
                 if (!valorDividaInput || isNaN(valorDividaInput) || valorDividaInput <= 0) {
                     alert("Por favor, insira um valor válido para a dívida.");
                     return;
@@ -288,10 +369,32 @@
                         break;
                     }
                 }
+
+                // Calcular emolumento com base no valor do imóvel
+                for (let faixa of faixasEmolumentos5e) {
+                    if (valorImovel <= faixa.limite) {
+                    emolumentoImovel = faixa.valores[0];
+                    break;
+                }
+                }
+                
+                let prenotacao = 62.89;
+                let arquivamento = 206.80;
+                let certidao = 40.34;
+                emolumentoFinal = emolumentoImovel + emolumentoDivida + prenotacao + arquivamento + certidao;
+                document.getElementById('resultado').innerHTML = `O custo total estimado para o serviço é de R$ ${emolumentoFinal.toFixed(2)}`;
+                document.getElementById('resultado2').innerHTML = `Discriminação dos valores <br><br>Prenotação: R$ ${prenotacao.toFixed(2)} <br>Registro da compra e venda: R$ ${emolumentoImovel.toFixed(2)}<br>Registro da alienação: R$ ${emolumentoDivida.toFixed(2)}<br>20 arquivamentos: R$ ${arquivamento.toFixed(2)}<br>Certidão: R$ ${certidao.toFixed(2)}`;
+
             }
 
             // Se o tipo de serviço for "doação com usufruto",    
             if (tipoServico === 'doacaousuf') {
+                   // Validação de entrada do valor do imóvel
+                if (isNaN(valorImovel) || valorImovel <= 0) {
+                    alert("Por favor, insira um valor válido para o imóvel.");
+                    return;
+                }
+                
                 // Calcular emolumento com base no valor do imóvel
                 for (let faixa of faixasEmolumentos5e) {
                     if (valorImovel <= faixa.limite) {
@@ -312,6 +415,12 @@
             }
 
             if (tipoServico === 'registro') {
+                // Validação de entrada do valor do imóvel
+                if (isNaN(valorImovel) || valorImovel <= 0) {
+                    alert("Por favor, insira um valor válido para o imóvel.");
+                    return;
+                }
+                
                 // Calcular emolumento com base no valor do imóvel
                 for (let faixa of faixasEmolumentos5e) {
                     if (valorImovel <= faixa.limite) {
@@ -326,24 +435,14 @@
                 document.getElementById('resultado').innerHTML = `O custo total estimado para o serviço é de R$ ${emolumentoFinal.toFixed(2)}`;
                 document.getElementById('resultado2').innerHTML = `Discriminação dos valores <br><br>Prenotação: R$ ${prenotacao.toFixed(2)} <br>Registro da compra e venda: R$ ${emolumentoImovel.toFixed(2)}<br>10 arquivamentos: R$ ${arquivamento.toFixed(2)}<br>Certidão: R$ ${certidao.toFixed(2)}`;
             }
-            
-            if (tipoServico === 'contrato') {
-                // Calcular emolumento com base no valor do imóvel
-                for (let faixa of faixasEmolumentos5e) {
-                    if (valorImovel <= faixa.limite) {
-                    emolumentoImovel = faixa.valores[0];
-                    break;
-                }
-                }
-                let prenotacao = 62.89;
-                let arquivamento = 206.80;
-                let certidao = 40.34;
-                emolumentoFinal = emolumentoImovel + emolumentoDivida + prenotacao + arquivamento + certidao;
-                document.getElementById('resultado').innerHTML = `O custo total estimado para o serviço é de R$ ${emolumentoFinal.toFixed(2)}`;
-                document.getElementById('resultado2').innerHTML = `Discriminação dos valores <br><br>Prenotação: R$ ${prenotacao.toFixed(2)} <br>Registro da compra e venda: R$ ${emolumentoImovel.toFixed(2)}<br>Registro da alienação: R$ ${emolumentoDivida.toFixed(2)}<br>20 arquivamentos: R$ ${arquivamento.toFixed(2)}<br>Certidão: R$ ${certidao.toFixed(2)}`;
-            }
 
             if (tipoServico === 'doacao') {
+                // Validação de entrada do valor do imóvel
+                if (isNaN(valorImovel) || valorImovel <= 0) {
+                    alert("Por favor, insira um valor válido para o imóvel.");
+                    return;
+                }
+                
                 // Calcular emolumento com base no valor do imóvel
                 for (let faixa of faixasEmolumentos5e) {
                     if (valorImovel <= faixa.limite) {
@@ -360,6 +459,11 @@
             }
 
             if (tipoServico === 'doacaousuf') {
+                // Validação de entrada do valor do imóvel
+                if (isNaN(valorImovel) || valorImovel <= 0) {
+                    alert("Por favor, insira um valor válido para o imóvel.");
+                    return;
+                }
                 // Calcular emolumento com base no valor do imóvel
                 for (let faixa of faixasEmolumentos5e) {
                     if (valorImovel <= faixa.limite) {
@@ -376,6 +480,11 @@
             }
            
             if (tipoServico === 'formal') {
+                // Validação de entrada do valor do imóvel
+                  if (isNaN(valorImovel) || valorImovel <= 0) {
+                    alert("Por favor, insira um valor válido para o imóvel.");
+                    return;
+                }
                 // Calcular emolumento com base no valor do imóvel
                 for (let faixa of faixasEmolumentos5e) {
                     if (valorImovel <= faixa.limite) {
@@ -392,6 +501,11 @@
             }
 
             if (tipoServico === 'retificacaoarearural') {
+                // Validação de entrada do valor do imóvel
+                if (isNaN(valorImovel) || valorImovel <= 0) {
+                    alert("Por favor, insira um valor válido para o imóvel.");
+                    return;
+                }
                 // Calcular emolumento com base no valor do imóvel
                 for (let faixa of faixasEmolumentos1c) {
                     if (valorImovel <= faixa.limite) {
@@ -410,6 +524,11 @@
             }
 
              if (tipoServico === 'retificacaoareaurbano') {
+                // Validação de entrada do valor do imóvel
+                if (isNaN(valorImovel) || valorImovel <= 0) {
+                    alert("Por favor, insira um valor válido para o imóvel.");
+                    return;
+                }
                 // Calcular emolumento com base no valor do imóvel
                 for (let faixa of faixasEmolumentos1c) {
                     if (valorImovel <= faixa.limite) {
@@ -425,9 +544,10 @@
                 document.getElementById('resultado').innerHTML = `O custo total estimado para o serviço é de R$ ${emolumentoFinal.toFixed(2)}`;
                 document.getElementById('resultado2').innerHTML = `Discriminação dos valores <br><br>Prenotação: R$ ${prenotacao.toFixed(2)} <br>Averbação da Retificação de área: R$ ${emolumentoImovel.toFixed(2)}<br>30 arquivamentos: R$ ${arquivamento.toFixed(2)}<br>Abertura da nova matrícula: R$ ${abertura.toFixed(2)}<br>Certidão: R$ ${certidao.toFixed(2)}`;
             }
-           
+            
+            result.style.display = 'block';
+            result2.style.display = 'block';
         }
-    
     
     </script>
 
