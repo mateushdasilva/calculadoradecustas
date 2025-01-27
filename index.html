@@ -132,6 +132,7 @@
                 <option value="doacaousuf">Escritura Pública de Doação com Usufruto</option>
                 <option value="formal">Formal de Partilha</option>
                 <option value="retificacaoarearural">Retificação de Área de Imóvel Rural</option>
+                <option value="retificacaoareaurbano">Retificação de Área de Imóvel Urbano</option>
             </select>
             <br><br>
             <label for="valor_imovel">Valor do Imóvel (R$)</label>
@@ -406,6 +407,23 @@
                 emolumentoFinal = emolumentoImovel + prenotacao + arquivamento + certidao + abertura + certificacao;
                 document.getElementById('resultado').innerHTML = `O custo total estimado para o serviço é de R$ ${emolumentoFinal.toFixed(2)}`;
                 document.getElementById('resultado2').innerHTML = `Discriminação dos valores <br><br>Prenotação: R$ ${prenotacao.toFixed(2)} <br>Averbação da Retificação de área: R$ ${emolumentoImovel.toFixed(2)}<br>40 arquivamentos: R$ ${arquivamento.toFixed(2)}<br>Abertura da nova matrícula: R$ ${abertura.toFixed(2)}<br> Certificação do Incra: R$ ${certificacao.toFixed(2)} <br>Certidão: R$ ${certidao.toFixed(2)}`;
+            }
+
+             if (tipoServico === 'retificacaoareaurbano') {
+                // Calcular emolumento com base no valor do imóvel
+                for (let faixa of faixasEmolumentos1c) {
+                    if (valorImovel <= faixa.limite) {
+                    emolumentoImovel = faixa.valores[0];
+                    break;
+                }
+                } 
+                let prenotacao = 60.04;
+                let arquivamento = 395.70;
+                let certidao = 40.34;
+                let abertura = 89.66;
+                emolumentoFinal = emolumentoImovel + prenotacao + arquivamento + certidao + abertura;
+                document.getElementById('resultado').innerHTML = `O custo total estimado para o serviço é de R$ ${emolumentoFinal.toFixed(2)}`;
+                document.getElementById('resultado2').innerHTML = `Discriminação dos valores <br><br>Prenotação: R$ ${prenotacao.toFixed(2)} <br>Averbação da Retificação de área: R$ ${emolumentoImovel.toFixed(2)}<br>30 arquivamentos: R$ ${arquivamento.toFixed(2)}<br>Abertura da nova matrícula: R$ ${abertura.toFixed(2)}<br>Certidão: R$ ${certidao.toFixed(2)}`;
             }
            
         }
