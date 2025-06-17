@@ -649,10 +649,11 @@
                 let arquivamento = 527.60;
                 let certidao = 40.34;
                 let abertura = 89.66;
+                let encerramento = 89.66;
                 let certificacao = 35.65;
-                emolumentoFinal = emolumentoImovel + prenotacao + arquivamento + certidao + abertura + certificacao;
+                emolumentoFinal = emolumentoImovel + prenotacao + arquivamento + certidao + abertura + encerramento + certificacao;
                 document.getElementById('resultado').innerHTML = `O custo total estimado para o serviço é de R$ ${emolumentoFinal.toFixed(2)}`;
-                document.getElementById('resultado2').innerHTML = `Descriminação dos valores <br><br>Prenotação: R$ ${prenotacao.toFixed(2)} <br>Averbação da Retificação de área: R$ ${emolumentoImovel.toFixed(2)}<br>40 arquivamentos: R$ ${arquivamento.toFixed(2)}<br>Abertura da nova matrícula: R$ ${abertura.toFixed(2)}<br> Certificação do Incra: R$ ${certificacao.toFixed(2)} <br>Certidão: R$ ${certidao.toFixed(2)}`;
+                document.getElementById('resultado2').innerHTML = `Descriminação dos valores <br><br>Prenotação: R$ ${prenotacao.toFixed(2)} <br>Averbação da Retificação de área: R$ ${emolumentoImovel.toFixed(2)}<br>40 arquivamentos: R$ ${arquivamento.toFixed(2)}<br>Encerramento da matrícula: R$ ${encerramento.toFixed(2)}<br>Abertura da nova matrícula: R$ ${abertura.toFixed(2)}<br> Certificação do Incra: R$ ${certificacao.toFixed(2)} <br>Certidão: R$ ${certidao.toFixed(2)}`;
             }
 
             // se registro igual retificação de área de imóvel urbano
